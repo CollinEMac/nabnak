@@ -1,5 +1,4 @@
 defmodule Nabnak.Projects do
-  import Ecto.Query
   alias Nabnak.Repo
   alias Nabnak.Projects.Project
 
