@@ -1,6 +1,9 @@
 defmodule NabnakWeb.BoardLive do
   use NabnakWeb, :live_view
+  use Phoenix.Component
+
   alias Nabnak.Tickets
+  alias Nabnak.Tickets.Ticket
   alias Nabnak.Projects
 
   @impl true
@@ -9,19 +12,63 @@ defmodule NabnakWeb.BoardLive do
       Phoenix.PubSub.subscribe(Nabnak.PubSub, "tickets")
     end
 
+    # Get all projects and ensure we have a valid current project
+    projects = Projects.list_projects()
+    current_project = List.first(projects)
+
     socket =
       socket
-      |> assign(:projects, Projects.list_projects())
+      |> assign(:projects, projects)
+      |> assign(:current_project, current_project)
       |> assign_tickets()
+      |> assign(:show_new_ticket_modal, false)
+      |> assign(:changeset, Ticket.changeset(%Ticket{}, %{}))
 
     {:ok, socket}
   end
 
   @impl true
   def handle_event("new_ticket", _params, socket) do
-    # TODO: Implement new ticket modal
-    {:noreply, socket}
+    {:noreply, assign(socket, :show_new_ticket_modal, true)}
   end
+
+  @impl true
+  def handle_event("close_new_ticket", _params, socket) do
+    {:noreply, assign(socket, :show_new_ticket_modal, false)}
+  end
+
+  @impl true
+  def handle_event("save_ticket", %{"ticket" => ticket_params}, socket) do
+    case socket.assigns.current_project do
+      nil ->
+        {:noreply,
+         socket
+         |> put_flash(:error, "No project selected")
+         |> assign(:changeset, Ticket.changeset(%Ticket{}, ticket_params))}
+
+      project ->
+        ticket_params =
+          ticket_params
+          |> Map.put("project_id", project.id)
+          |> Map.put("status", "todo")
+
+        case Tickets.create_ticket(ticket_params) do
+          {:ok, _ticket} ->
+            {:noreply,
+             socket
+             |> put_flash(:info, "Ticket created successfully")
+             |> assign(:show_new_ticket_modal, false)
+             |> assign_tickets()}
+
+          {:error, %Ecto.Changeset{} = changeset} ->
+            {:noreply,
+             socket
+             |> put_flash(:error, "Error creating ticket")
+             |> assign(:changeset, changeset)}
+        end
+    end
+  end
+
 
   @impl true
   def handle_event("search", %{"value" => search_term}, socket) do

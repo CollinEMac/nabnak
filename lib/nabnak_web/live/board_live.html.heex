@@ -50,12 +50,6 @@
                 </span>
               </div>
               <h3 class="font-medium mt-2"><%= ticket.title %></h3>
-              <div class="mt-2 flex items-center gap-2">
-                <div class="w-6 h-6 rounded-full bg-gray-200 overflow-hidden">
-                  <img src={ticket.assignee.avatar_url} alt={ticket.assignee.name} />
-                </div>
-                <span class="text-sm text-gray-600"><%= ticket.assignee.name %></span>
-              </div>
             </div>
           <% end %>
         </div>
@@ -137,16 +131,53 @@
                 </span>
               </div>
               <h3 class="font-medium mt-2"><%= ticket.title %></h3>
-              <div class="mt-2 flex items-center gap-2">
-                <div class="w-6 h-6 rounded-full bg-gray-200 overflow-hidden">
-                  <img src={ticket.assignee.avatar_url} alt={ticket.assignee.name} />
-                </div>
-                <span class="text-sm text-gray-600"><%= ticket.assignee.name %></span>
-              </div>
             </div>
           <% end %>
         </div>
       </div>
     </div>
   </div>
+  <%= if @show_new_ticket_modal do %>
+    <div class="fixed inset-y-0 right-0 w-96 bg-white shadow-xl transform transition-transform duration-300 ease-in-out z-50">
+      <div class="h-full flex flex-col">
+        <div class="px-4 py-6 border-b">
+          <div class="flex items-center justify-between">
+            <h2 class="text-xl font-semibold">New Ticket</h2>
+            <button phx-click="close_new_ticket" class="text-gray-400 hover:text-gray-500">
+              <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
+        </div>
+        <div class="flex-1 overflow-y-auto px-4 py-6">
+          <.form :let={f} for={@changeset} phx-submit="save_ticket" as={:ticket}>
+            <div class="space-y-6">
+              <div>
+                <.label>Title</.label>
+                <.input field={f[:title]} type="text" />
+              </div>
+              
+              <div>
+                <.label>Description</.label>
+                <.input field={f[:description]} type="textarea" rows={4} />
+              </div>
+
+              <div>
+                <.label>Priority</.label>
+                <.input field={f[:priority]} type="select" options={["low", "medium", "high"]} />
+              </div>
+              
+              <div class="pt-4">
+                <.button type="submit" class="w-full">Create Ticket</.button>
+              </div>
+            </div>
+          </.form>
+        </div>
+      </div>
+    </div>
+    
+    <%!-- Add an overlay that closes the modal when clicked --%>
+    <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity z-40" phx-click="close_new_ticket"></div>
+  <% end %>
 </div>

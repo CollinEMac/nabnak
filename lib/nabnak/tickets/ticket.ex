@@ -17,9 +17,10 @@ defmodule Nabnak.Tickets.Ticket do
   def changeset(ticket, attrs) do
     ticket
     |> cast(attrs, [:title, :description, :status, :priority, :project_id, :assignee_id])
-    |> validate_required([:title, :status, :priority])
+    |> validate_required([:title, :status, :priority, :project_id])
     |> validate_inclusion(:status, ["todo", "in_progress", "review", "done"])
     |> validate_inclusion(:priority, ["low", "medium", "high"])
+    |> foreign_key_constraint(:project_id) 
   end
 end
 
