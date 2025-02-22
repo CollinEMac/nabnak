@@ -4,7 +4,7 @@
   <header class="mb-8">
     <h1 class="text-3xl font-bold mb-4">Project Board</h1>
     <div class="flex gap-4">
-      <div class="w-80">
+      <div class="flex-1 min-w-[10em]">
         <div class="flex gap-4">
           <div>
             <button phx-click="new_ticket" class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">
@@ -21,9 +21,9 @@
           </div>
         </div>
       </div>
-      <div class="w-80"></div>
-      <div class="w-80"></div>
-      <div class="w-80">
+      <div class="flex-1 min-w-[10em]"></div>
+      <div class="flex-1 min-w-[10em]"></div>
+      <div class="flex-1 min-w-[10em]">
         <input type="text" 
                placeholder="Search tickets..." 
                class="w-full px-4 py-2 border rounded" 
@@ -32,9 +32,9 @@
     </div>
   </header>
 
-  <div class="flex gap-4 overflow-x-auto pb-4" id="kanban-board">
+  <div class="flex flex-wrap gap-4 pb-4" id="kanban-board">
     <!-- Todo Column -->
-    <div class="flex-none w-80">
+    <div class="flex-1 min-w-[10em]">
       <div class="bg-gray-100 rounded-lg p-4">
         <h2 class="font-semibold mb-4 flex justify-between items-center">
           To Do
@@ -63,7 +63,7 @@
     </div>
 
     <!-- In Progress Column -->
-    <div class="flex-none w-80">
+    <div class="flex-1 min-w-[10em]">
       <div class="bg-gray-100 rounded-lg p-4">
         <h2 class="font-semibold mb-4 flex justify-between items-center">
           In Progress
@@ -92,7 +92,7 @@
     </div>
 
     <!-- Review Column -->
-    <div class="flex-none w-80">
+    <div class="flex-1 min-w-[10em]">
       <div class="bg-gray-100 rounded-lg p-4">
         <h2 class="font-semibold mb-4 flex justify-between items-center">
           Review
@@ -121,7 +121,7 @@
     </div>
 
     <!-- Done Column -->
-    <div class="flex-none w-80">
+    <div class="flex-1 min-w-[10em]">
       <div class="bg-gray-100 rounded-lg p-4">
         <h2 class="font-semibold mb-4 flex justify-between items-center">
           Done
