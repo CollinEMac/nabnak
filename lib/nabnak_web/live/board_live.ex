@@ -5,6 +5,7 @@ defmodule NabnakWeb.BoardLive do
   alias Nabnak.Tickets
   alias Nabnak.Tickets.Ticket
   alias Nabnak.Projects
+  alias Nabnak.Accounts
 
   @impl true
   def mount(_params, _session, socket) do
@@ -16,10 +17,15 @@ defmodule NabnakWeb.BoardLive do
     projects = Projects.list_projects()
     current_project = List.first(projects)
 
+    # Get users
+    # TODO: Only get users for this project
+    users = Accounts.list_users()
+
     socket =
       socket
       |> assign(:projects, projects)
       |> assign(:current_project, current_project)
+      |> assign(:users, users)
       |> assign_tickets()
       |> assign(:show_new_ticket_modal, false)
       |> assign(:changeset, Ticket.changeset(%Ticket{}, %{}))

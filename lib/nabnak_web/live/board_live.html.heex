@@ -167,7 +167,17 @@
                 <.label>Priority</.label>
                 <.input field={f[:priority]} type="select" options={["low", "medium", "high"]} />
               </div>
-              
+
+              <div>
+                <.label>Assignee</.label>
+                <.input 
+                  field={f[:assignee_id]} 
+                  type="select" 
+                  options={Enum.map(@users, fn user -> {user.name || user.email, user.id} end)}
+                  prompt="Unassigned" 
+                />
+              </div>
+                        
               <div class="pt-4">
                 <.button type="submit" class="w-full">Create Ticket</.button>
               </div>
